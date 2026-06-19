@@ -1,3 +1,5 @@
+const container = document.querySelector("#container");
+
 function getComputerChoice(){
     let ch,rand;
     rand=Math.random();
@@ -10,71 +12,67 @@ function getComputerChoice(){
     return(ch);
 }
 
-function getHumanChoice(){
-    let ch=prompt("Enter your choice: ","Rock, Paper or Scissor");
-    ch=ch.toUpperCase();
-    return(ch);
-}
-
 function playRound(humanSelection, computerSelection){
     let win;
     if(humanSelection=="ROCK"){
         if(computerSelection=="PAPER"){
-            console.log("Computer wins.");
+            alert("Computer wins.");
             win="COMPUTER";
         }
         else if(computerSelection=="SCISSOR"){
-            console.log("Human Wins.");
+            alert("Human Wins.");
             win="HUMAN";
         }
         else if(computerSelection=="ROCK"){
-            console.log("Draw.");
+            alert("Draw.");
             win=null;
         }
     }
     else if(humanSelection=="PAPER"){
         if(computerSelection=="SCISSOR"){
-            console.log("Computer wins.");
+            alert("Computer wins.");
             win="COMPUTER";
         }
         else if(computerSelection=="ROCK"){
-            console.log("Human Wins.");
+            alert("Human Wins.");
             win="HUMAN"
         }
         else if(computerSelection=="PAPER"){
-            console.log("Draw.");
+            alert("Draw.");
             win=null;
         }
     }
     else if(humanSelection=="SCISSOR"){
         if(computerSelection=="ROCK"){
-            console.log("Computer wins.");
+            alert("Computer wins.");
             win="COMPUTER";
         }
         else if(computerSelection=="PAPER"){
-            console.log("Human Wins.");
+            alert("Human Wins.");
             win="HUMAN";
         }
         else if(computerSelection=="SCISSOR"){
-            console.log("Draw.");
+           alert("Draw.");
             win=null;
         }
-    }
-    else{
-        console.log("Invalid Choice by Human!");
-        win=null;
     }
     return(win);
 }
 
-function playGame(){
+function playGame(HumanChoice){
     let win;
 
-    const humanSelection = getHumanChoice();
+    const humanSelection = HumanChoice;
     const computerSelection = getComputerChoice();
 
-    console.log(`Human's choice: ${humanSelection}`);
-    console.log(`Computer's choice: ${computerSelection}`);
+    const hchoice=document.querySelector('#hchoice');
+    hchoice.style.color='blue';
+    hchoice.textContent=`Human's choice: ${humanSelection}`;
+    container.appendChild(hchoice);
+    const cchoice=document.querySelector('#cchoice');
+    cchoice.style.color='blue';
+    cchoice.textContent=`Computers's choice: ${computerSelection}`;
+    container.appendChild(cchoice);
 
     let winner=playRound(humanSelection, computerSelection);
     if(winner=="HUMAN")
@@ -82,21 +80,37 @@ function playGame(){
     else if(winner=="COMPUTER")
         cscore++;
 
+    const score=document.querySelector("#score");
+    score.style.color='red';
+    score.textContent=`SCORE: Human's Score: ${hscore}, Computer's Score: ${cscore}`;
     console.log(`SCORE: Human's Score: ${hscore}, Computer's Score: ${cscore}`);
     console.log("=============================================================");
-    
 }
 
+let ch=null;
 let hscore=0, cscore=0;
+const buttons=document.querySelectorAll('button');
+buttons.forEach((button)=>{
+    button.addEventListener('click', () => {
+        if(hscore>=5 || cscore>=5){
+            return;
+        }
+        if(button.id=='rock')
+            ch="ROCK";
+        else if(button.id=='paper')
+            ch="PAPER";
+        else if(button.id=='scissor')
+            ch="SCISSOR";
+        playGame(ch);
 
-for(let i=0;i<5;i++){
-    console.log(`Round ${i+1}`);
-    playGame();
-}
-
-if(hscore>cscore)
-    console.log("Human is the winner!");
-else if(hscore<cscore)
-    console.log("Computer is the winner!");
-else
-    console.log("Draw");
+        const winner=document.createElement('h1');
+        winner.style.color='green';
+        if(hscore>=5){
+            winner.textContent="Human is the winner!";
+            container.appendChild(winner);
+        }else if(cscore>=5){
+            winner.textContent="Computer is the winner!";
+            container.appendChild(winner);
+        }
+    })
+})
